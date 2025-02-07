@@ -42,6 +42,7 @@ export const FormContainer = styled.div`
 
 export const InputWrapper = styled.div`
   display: flex;
+  position: relative;
   flex-direction: column;
   width: 100%;
 
@@ -69,6 +70,13 @@ export const InputWrapper = styled.div`
     &:focus-visible {
       border: 2px solid #0284c7 !important;
     }
+  }
+
+  .icon {
+    position: absolute;
+    bottom: 0.7rem;
+    color: #111827;
+    right: 0.5rem;
   }
 `;
 
@@ -99,6 +107,7 @@ export const FormArea = styled.form`
   width: 100%;
   margin-top: 1.25rem;
   gap: 1rem;
+  cursor: pointer;
 
   p {
     text-align: center;

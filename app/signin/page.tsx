@@ -6,10 +6,12 @@ import { signIn } from "next-auth/react";
 import logo from "../../public/logo.png";
 import Image from "next/image";
 import { redirect } from "next/navigation";
+import { IoMdEye, IoMdEyeOff } from "react-icons/io";
 
 export default function SignIn() {
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const [showPassword, setShowPassword] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -59,11 +61,24 @@ export default function SignIn() {
             <S.InputWrapper>
               <label htmlFor="password">Senha</label>
               <input
-                type="password"
+                type={showPassword ? "text" : "password"}
                 id="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
+              {showPassword ? (
+                <IoMdEyeOff
+                  className="icon"
+                  size={20}
+                  onClick={() => setShowPassword(!showPassword)}
+                />
+              ) : (
+                <IoMdEye
+                  className="icon"
+                  size={20}
+                  onClick={() => setShowPassword(!showPassword)}
+                />
+              )}
             </S.InputWrapper>
             {error && <p style={{ color: "red" }}>{error}</p>}
 
