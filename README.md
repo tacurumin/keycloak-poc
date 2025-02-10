@@ -18,14 +18,19 @@ Then, you need to create and setup the enviroment based on example.env file:
 
 ```
 # Keycloak area:
-# Keycloak setup:
-KEYCLOAK_CLIENT_ID="Your Keycloak client id"
-KEYCLOAK_CLIENT_SECRET="Your Keycloak client secred"
-KEYCLOAK_ISSUER="http://localhost:8080/realms/Your Keycloak realm"
+KEYCLOAK_CLIENT_ID="Keycloak client id"
+KEYCLOAK_CLIENT_SECRET="Keycloak client secret"
+KEYCLOAK_ISSUER="http://localhost:8080/realms/Your keycloak realm"
 
-# NextAuth setup:
+# Keycloak public account service:
+NEXT_PUBLIC_KEYCLOAK_CLIENT_ID="Keycloak client id (can be the same, just need to setup the account-service)"
+NEXT_PUBLIC_KEYCLOAK_CLIENT_SECRET="Keycloak client secret"
+NEXT_PUBLIC_KEYCLOAK_ISSUER="http://localhost:8080/realms/Your keycloak realm"
+NEXT_PUBLIC_KEYCLOAK_REGISTER_URL="http://localhost:8080/admin/realms/Your keycloak realm/users"
+
+# Next auth setup:
 NEXTAUTH_URL="http://localhost:3000"
-NEXTAUTH_SECRET="Generate a custom base64" # Use the command: openssl rand -base64 32
+NEXTAUTH_SECRET="" # Use the command: openssl rand -base64 32
 ```
 
 After then .env setup, run the development server:

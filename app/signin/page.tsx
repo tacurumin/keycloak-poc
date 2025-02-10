@@ -84,6 +84,13 @@ export default function SignIn() {
 
             <S.Button type="submit">Entrar</S.Button>
           </S.FormArea>
+          <S.Button
+            className="secondary"
+            type="submit"
+            onClick={() => redirect("/signup")}
+          >
+            Cadastrar
+          </S.Button>
         </S.FormContainer>
       </S.ContentWrapper>
     </S.Container>
