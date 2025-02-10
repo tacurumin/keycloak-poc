@@ -110,7 +110,6 @@ export const FormArea = styled.form`
   width: 100%;
   margin-top: 1.25rem;
   gap: 1rem;
-  cursor: pointer;
 
   p {
     text-align: center;

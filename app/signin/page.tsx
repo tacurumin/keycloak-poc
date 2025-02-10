@@ -11,12 +11,17 @@ import { IoMdEye, IoMdEyeOff } from "react-icons/io";
 export default function SignIn() {
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+
   const [showPassword, setShowPassword] = useState<boolean>(false);
+
+  const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     e.stopPropagation();
+
+    setLoading(true);
 
     const result = await signIn("keycloak", {
       redirect: false, // Prevent automatic redirection
@@ -24,6 +29,7 @@ export default function SignIn() {
       password,
       callbackUrl: "http://localhost:3000",
     });
+    setLoading(false);
 
     if (result?.error) {
       setError("Nome de usuario ou senha incorretos");
@@ -82,7 +88,9 @@ export default function SignIn() {
             </S.InputWrapper>
             {error && <p style={{ color: "red" }}>{error}</p>}
 
-            <S.Button type="submit">Entrar</S.Button>
+            <S.Button type="submit" disabled={loading}>
+              {loading ? <S.Spinner /> : "Entrar"}
+            </S.Button>
           </S.FormArea>
           <S.Button
             className="secondary"

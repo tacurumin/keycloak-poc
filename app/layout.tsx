@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Keyclok login POC",
+  title: "Keycloak: Usage POC",
   description:
     "Proof of concept that contains the Keycloak integration with Next Auth and NextJS",
 };
