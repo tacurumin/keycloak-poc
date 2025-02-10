@@ -45,7 +45,7 @@ export const useKeycloakSignup = () => {
         email,
         emailVerified: true, // Verify user email
         firstName: socialName,
-        lastName: socialName,
+        //lastName: socialName,
         enabled: true,
         credentials: [
           {

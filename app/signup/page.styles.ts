@@ -77,6 +77,13 @@ export const InputWrapper = styled.div`
     bottom: 0.7rem;
     color: #111827;
     right: 0.5rem;
+    transition: 150ms all;
+    cursor: pointer;
+
+    &:hover {
+      background-color: rgb(228, 228, 228);
+      border-radius: 100%;
+    }
   }
 `;
 

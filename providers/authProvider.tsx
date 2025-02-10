@@ -32,9 +32,13 @@ export const authOptions: NextAuthOptions = {
         );
 
         const data = await res.json();
+        //console.log(data);
 
         if (res.ok && data.access_token) {
           const decodedJWT = jwtDecode<JwtPayloadEnhanced>(data.access_token);
+          // DEBUG:
+          //console.log(decodedJWT);
+
           // The information stored here, will be returned in the "User" object
           // in the callback section.
           return {
@@ -43,8 +47,11 @@ export const authOptions: NextAuthOptions = {
             accessToken: data.access_token,
             user: {
               name: decodedJWT.name,
+              givenName: decodedJWT.given_name,
               preferredUsername: decodedJWT.preferred_username,
               email: decodedJWT.email,
+              group: decodedJWT.group,
+              roles: decodedJWT.realm_access?.roles,
             },
           };
         }
@@ -65,8 +72,11 @@ export const authOptions: NextAuthOptions = {
         token.accessToken = user.accessToken;
         token.user = {
           name: user.user?.name,
+          givenName: user.user?.givenName,
           preferredUsername: user.user?.preferredUsername,
           email: user.user?.email,
+          group: user.user?.group,
+          roles: user.user?.roles,
         };
       }
       return token;
@@ -78,8 +88,11 @@ export const authOptions: NextAuthOptions = {
       session.idToken = token.idToken;
       session.user = {
         name: token.user?.name,
+        givenName: token.user?.givenName,
         preferredUsername: token.user?.preferredUsername,
         email: token.user?.name,
+        roles: token.user?.roles,
+        group: token.user?.group,
       };
       return session;
     },

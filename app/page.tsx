@@ -9,11 +9,7 @@ export default async function Home() {
 
   //  Login succeeded:
   if (session) {
-    return (
-      <LogoutWrapper
-        username={session.user?.preferredUsername || session.user?.name || ""}
-      />
-    );
+    return <LogoutWrapper user={session.user} />;
   }
 
   // Main page of the application:
