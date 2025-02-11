@@ -4,7 +4,7 @@ import { signOut } from "next-auth/react";
 import logo from "../../public/logo.png";
 import Image from "next/image";
 import { IUserOptions } from "@/providers/types";
-import { getRoleName } from "./utils";
+import { getRoleComponent } from "./utils";
 
 type Props = {
   user?: IUserOptions;
@@ -23,24 +23,15 @@ export default function Logout({ user }: Props) {
         />
 
         <S.DataContainer>
-          <h1>Bem vindo!</h1>
-          <h2>
-            <b>{user?.givenName || user?.preferredUsername}</b>
-            {" acessou com sucesso a plataforma!"}
-          </h2>
+          <h1>
+            Bem vindo, <b>{`${user?.givenName || user?.preferredUsername}!`}</b>
+          </h1>
 
-          {user?.group && (
-            <h2>
-              {"Voce faz parte da organizacao: "}
-              <b>{user?.group[0] || ""}</b>
-            </h2>
-          )}
-
-          {user?.roles && (
-            <h2>
-              {"Seu nivel de acesso e: "}
-              <b>{getRoleName(user.roles)}</b>
-            </h2>
+          {user?.group && user?.roles && (
+            <p className="company-and-access-level">
+              {user?.group[0] || ""}
+              {getRoleComponent(user.roles)}
+            </p>
           )}
 
           <S.Button type="submit" onClick={() => signOut()}>
