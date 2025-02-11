@@ -1,13 +1,16 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 // pages/auth/signin.tsx
 "use client";
 import * as S from "./page.styles";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import logo from "../../public/logo.png";
 import Image from "next/image";
 import { IoMdEye, IoMdEyeOff } from "react-icons/io";
 import {
+  cnpjMask,
   DEFAULT_VALUES,
   ISignupProps,
+  removeMask,
   useFormValidation,
 } from "./page.validation";
 import { useKeycloakSignup } from "@/hooks/useKeycloackSignup";
@@ -24,11 +27,13 @@ export default function SignUp() {
     e.preventDefault();
     e.stopPropagation();
 
-    // Form validation:
-    validateForm({ ...formData });
-
-    if (isValid) signUp({ ...formData });
+    if (isValid) signUp({ ...formData, cnpj: removeMask(formData.cnpj) });
   };
+
+  // Form validation onChange:
+  useEffect(() => {
+    validateForm({ ...formData });
+  }, [formData]);
 
   return (
     <S.Container>
@@ -50,7 +55,8 @@ export default function SignUp() {
               <input
                 type="text"
                 id="username"
-                value={formData.cnpj}
+                maxLength={18}
+                value={cnpjMask(formData.cnpj)}
                 onChange={(e) =>
                   setFormData((item) => ({ ...item, cnpj: e.target.value }))
                 }
