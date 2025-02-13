@@ -6,62 +6,67 @@ interface IServiceToken extends ISignupProps {
   serviceToken: string;
 }
 
+export const serviceTokenRequest = async () => {
+  return fetch(
+    `${process.env.NEXT_PUBLIC_KEYCLOAK_ISSUER}/protocol/openid-connect/token`,
+    {
+      method: "POST",
+      mode: "cors",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: new URLSearchParams({
+        client_id: process.env.NEXT_PUBLIC_KEYCLOAK_CLIENT_ID ?? "",
+        client_secret: process.env.NEXT_PUBLIC_KEYCLOAK_CLIENT_SECRET ?? "",
+        grant_type: "client_credentials",
+      }),
+    }
+  );
+};
+
+export const performUserSignupRequest = async ({
+  cnpj,
+  socialName,
+  cpf,
+  name,
+  email,
+  password,
+  serviceToken,
+}: IServiceToken) => {
+  return fetch(`${process.env.NEXT_PUBLIC_KEYCLOAK_ADMIN_ISSUER}/users`, {
+    method: "POST",
+    mode: `cors`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${serviceToken}`,
+    },
+    body: JSON.stringify({
+      username: cpf,
+      groups: [`${cnpj};${socialName}`],
+      email,
+      emailVerified: true, // Verify user email
+      firstName: name,
+      //lastName: socialName,
+      enabled: true,
+      credentials: [
+        {
+          type: "password",
+          value: password,
+          temporary: false, // Make the password permanent
+        },
+      ],
+    }),
+  });
+};
+
 export const useKeycloakSignup = () => {
   const [error, setError] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
 
-  const serviceTokenRequest = async () => {
-    return fetch(
-      `${process.env.NEXT_PUBLIC_KEYCLOAK_ISSUER}/protocol/openid-connect/token`,
-      {
-        method: "POST",
-        mode: "cors",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: new URLSearchParams({
-          client_id: process.env.NEXT_PUBLIC_KEYCLOAK_CLIENT_ID ?? "",
-          client_secret: process.env.NEXT_PUBLIC_KEYCLOAK_CLIENT_SECRET ?? "",
-          grant_type: "client_credentials",
-        }),
-      }
-    );
-  };
-
-  const performUserSignupRequest = async ({
-    cnpj,
-    email,
-    socialName,
-    password,
-    serviceToken,
-  }: IServiceToken) => {
-    return fetch(`${process.env.NEXT_PUBLIC_KEYCLOAK_REGISTER_URL}`, {
-      method: "POST",
-      mode: `cors`,
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${serviceToken}`,
-      },
-      body: JSON.stringify({
-        username: cnpj,
-        email,
-        emailVerified: true, // Verify user email
-        firstName: socialName,
-        //lastName: socialName,
-        enabled: true,
-        credentials: [
-          {
-            type: "password",
-            value: password,
-            temporary: false, // Make the password permanent
-          },
-        ],
-      }),
-    });
-  };
-
   const signUp = async ({
     cnpj,
-    email,
     socialName,
+    cpf,
+    name,
+    email,
     password,
   }: ISignupProps) => {
     setLoading(true); // Loading starts
@@ -84,10 +89,12 @@ export const useKeycloakSignup = () => {
     // Perform a signup:
     const performSignup = await performUserSignupRequest({
       cnpj,
-      email,
-      serviceToken,
       socialName,
+      cpf,
+      name,
+      email,
       password,
+      serviceToken,
     });
 
     // DEBUG:

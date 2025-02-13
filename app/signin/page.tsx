@@ -3,10 +3,9 @@
 import * as S from "./page.styles";
 import { useState } from "react";
 import { signIn } from "next-auth/react";
-import logo from "../../public/logo.png";
-import Image from "next/image";
 import { redirect } from "next/navigation";
 import { IoMdEye, IoMdEyeOff } from "react-icons/io";
+import { LogoRedirect } from "@/components/LogoRedirect/LogoRedirect";
 
 export default function SignIn() {
   const [username, setUsername] = useState<string>("");
@@ -42,13 +41,7 @@ export default function SignIn() {
   return (
     <S.Container>
       <S.ContentWrapper>
-        <Image
-          src={logo}
-          alt={"LB Bank Logo"}
-          width={175}
-          height={64}
-          priority
-        />
+        <LogoRedirect />
 
         <S.FormContainer>
           <h1>Entrar</h1>

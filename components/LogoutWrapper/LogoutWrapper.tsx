@@ -1,10 +1,9 @@
 "use client";
 import * as S from "./LogoutWrapper.styles";
 import { signOut } from "next-auth/react";
-import logo from "../../public/logo.png";
-import Image from "next/image";
 import { IUserOptions } from "@/providers/types";
 import { getRoleComponent } from "./utils";
+import { LogoRedirect } from "../LogoRedirect/LogoRedirect";
 
 type Props = {
   user?: IUserOptions;
@@ -14,13 +13,7 @@ export default function Logout({ user }: Props) {
   return (
     <S.Container>
       <S.ContentWrapper>
-        <Image
-          src={logo}
-          alt={"LB Bank Logo"}
-          width={175}
-          height={64}
-          priority
-        />
+        <LogoRedirect />
 
         <S.DataContainer>
           <h1>

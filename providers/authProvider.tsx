@@ -26,6 +26,7 @@ export const authOptions: NextAuthOptions = {
               client_secret: process.env.KEYCLOAK_CLIENT_SECRET ?? "",
               username: credentials?.username ?? "",
               password: credentials?.password ?? "",
+              // include the otp in the login credentials
               grant_type: "password",
             }),
           }

@@ -2,8 +2,13 @@ import { useState } from "react";
 
 // TO DO: CHANGE TO USEFORM OR ANOTHER FORM LIBRARY
 export interface ISignupProps {
+  //  Company data:
   cnpj: string;
   socialName: string;
+
+  //  Personal data:
+  cpf: string;
+  name: string;
   password: string;
   email: string;
 }
@@ -11,55 +16,40 @@ export interface ISignupProps {
 export const DEFAULT_VALUES = {
   cnpj: "",
   socialName: "",
+  cpf: "",
+  name: "",
   password: "",
   email: "",
 };
 
 export const useFormValidation = () => {
-  const [fieldError, setFieldError] = useState<string>("");
+  const [fieldErrors, setFieldErrors] = useState<string[]>([]);
   const [isValid, setIsValid] = useState<boolean>(false);
 
-  function validateForm({ cnpj, socialName, password, email }: ISignupProps) {
-    setFieldError("");
+  function validateForm(formData: ISignupProps) {
     setIsValid(false);
+    const auxErrors: string[] = [];
 
-    if (cnpj.length === 0) {
-      setFieldError("Campo CNPJ invalido");
-      return;
-    }
-    if (socialName.length === 0) {
-      setFieldError("Campo razao social invalido");
-      return;
-    }
+    const fieldKeys: string[] = Object.keys(formData);
+    const fieldValues: string[] = Object.values(formData);
 
-    if (email.length === 0) {
-      setFieldError("Campo email invalido");
-      return;
-    }
+    fieldKeys.forEach((key, i) => {
+      fieldValues.forEach((value, j) => {
+        if (i === j && value.length === 0) auxErrors.push(key);
+      });
+    });
 
-    if (password.length === 0) {
-      setFieldError("Campo senha invalido");
-      return;
-    }
-
-    if (fieldError === "") setIsValid(true);
+    // DEBUG:
+    //console.log(auxErrors);
+    setFieldErrors(auxErrors);
+    if (auxErrors.length === 0) setIsValid(true);
   }
 
-  return { validateForm, fieldError, isValid };
-};
+  function hasError(fieldKey: string) {
+    console.log(fieldErrors);
+    console.log(fieldKey);
+    return fieldErrors.includes(fieldKey);
+  }
 
-// Input masking:
-export const cnpjMask = (value: string) => {
-  return value
-    .replace(/\D+/g, "") // não deixa ser digitado nenhuma letra
-    .replace(/(\d{2})(\d)/, "$1.$2") // captura 2 grupos de número o primeiro com 2 digitos e o segundo de com 3 digitos, apos capturar o primeiro grupo ele adiciona um ponto antes do segundo grupo de número
-    .replace(/(\d{3})(\d)/, "$1.$2")
-    .replace(/(\d{3})(\d)/, "$1/$2") // captura 2 grupos de número o primeiro e o segundo com 3 digitos, separados por /
-    .replace(/(\d{4})(\d)/, "$1-$2")
-    .replace(/(-\d{2})\d+?$/, "$1"); // captura os dois últimos 2 números, com um - antes dos dois números
-};
-
-export const removeMask = (value: string) => {
-  console.log(value);
-  return value.replace(/\W/g, "");
+  return { validateForm, hasError, fieldErrors, isValid };
 };
